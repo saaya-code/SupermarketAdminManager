@@ -1,12 +1,17 @@
 package Client.UI;
+import Classes.User;
+import Client.CRUD.ProduitDAO;
 import Client.UI.InternalFrames.AjouterProduit;
 import Client.UI.InternalFrames.RechercherProduit;
+import Server.Config;
+import Server.MyConnection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -26,18 +31,21 @@ public class Application extends JFrame{
     JDesktopPane desktop;
 
     private Socket socket;
-
-    public Application(Socket s){
+    Connection con;
+    ProduitDAO produitDAO;
+    public Application(User user){
         this.setSize(700, 700);
         this.setTitle("Supermarket Manager");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         desktop = new JDesktopPane();
         this.add(desktop);
         this.setVisible(true);
-        this.socket = s;
+        this.socket = user.getUserSocket();
         initliazeComponents();
         createLayout();
         addEventListeners();
+        this.con = MyConnection.getConnection(Config.URL, Config.USERNAME, Config.PASSWORD);
+        produitDAO = new ProduitDAO(con);
 
     }
     private void initliazeComponents(){
@@ -72,7 +80,7 @@ public class Application extends JFrame{
             AjouterProduit ajouterProduit = null;
             RechercherProduit rechercherProduit = null;
             try {
-                ajouterProduit = new AjouterProduit(socket);
+                ajouterProduit = new AjouterProduit(socket, produitDAO);
 
             } catch (SQLException | ClassNotFoundException | IOException ex) {
                 throw new RuntimeException(ex);
@@ -80,10 +88,7 @@ public class Application extends JFrame{
             desktop.add(ajouterProduit);
         });
         menuItemRechercherProduit.addActionListener(e -> {
-            AjouterProduit ajouterProduit = null;
-            RechercherProduit rechercherProduit = null;
-            rechercherProduit = new RechercherProduit(socket);
-
+            RechercherProduit rechercherProduit = new RechercherProduit(produitDAO);
             desktop.add(rechercherProduit);
         });
     }

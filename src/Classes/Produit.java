@@ -8,7 +8,8 @@ public class Produit {
     int Quantite;
     String mesurementUnit;
     String Categorie;
-    public Produit(int IdProduit, String NomProduit, String Description, int Prix, int Quantite, String mesurementUnit, String Categorie) {
+    int idFour;
+    public Produit(int IdProduit, String NomProduit, String Description, int Prix, int Quantite, String mesurementUnit, String Categorie, int idFour) {
         this.IdProduit = IdProduit;
         this.NomProduit = NomProduit;
         this.Description = Description;
@@ -16,6 +17,7 @@ public class Produit {
         this.Quantite = Quantite;
         this.mesurementUnit = mesurementUnit;
         this.Categorie = Categorie;
+        this.idFour = idFour;
     }
 
     public int getIdProduit() {
@@ -68,6 +70,14 @@ public class Produit {
 
     public String getCategorie() {
         return Categorie;
+    }
+
+    public int getIdFour() {
+        return idFour;
+    }
+
+    public void setIdFour(int idFour) {
+        this.idFour = idFour;
     }
 
     public void setCategorie(String categorie) {

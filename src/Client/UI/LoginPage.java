@@ -1,5 +1,7 @@
 package Client.UI;
 
+import Classes.User;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -106,7 +108,8 @@ public class LoginPage extends JFrame {
 
                     if(result.contains("Login successful")) {
                         this.dispose();
-                        new Application(socket);
+                        User user = new User(username, socket);
+                        new Application(user);
                     } else {
                         JOptionPane.showMessageDialog(this, "Login failed");
                     }

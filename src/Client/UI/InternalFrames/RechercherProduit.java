@@ -1,90 +1,120 @@
 package Client.UI.InternalFrames;
 
+import Classes.Produit;
+import Client.CRUD.ProduitDAO;
+
 import javax.swing.*;
 import java.awt.*;
-import java.net.Socket;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RechercherProduit extends JInternalFrame {
-    Socket socket;
-    JLabel idProduitLabel;
-    JTextField idProduitField;
-    JLabel nomProduitLabel;
-    JTextField nomProduitField;
-    JLabel descriptionProduitLabel;
-    JTextField descriptionProduitField;
-    JLabel prixProduitLabel;
-    JTextField prixProduitField;
-    JLabel quantiteProduitLabel;
-    JTextField quantiteProduitField;
-    JLabel fournisserLabel;
-    JTextField fournisserField;
-    JLabel categorieProduitLabel;
-    JTextField categorieProduitField;
-    JLabel mesurementLabel;
-    JTextField mesurementField;
+    ProduitDAO produitDAO;
+    JTextField idProduitField, nomProduitField, descriptionProduitField, prixProduitField, quantiteProduitField, fournisserField, categorieProduitField, mesurementField;
+    JButton rechercherButton, annulerButton;
 
-    JButton rechercherButton;
-    JButton annulerButton;
-
-    public RechercherProduit(Socket s) {
+    public RechercherProduit(ProduitDAO produitDAO) {
         this.setSize(500, 500);
         this.setTitle("Rechercher Produit");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.socket = s;
+        this.produitDAO = produitDAO;
         initializeComponents();
         createLayout();
-        //addEventListeners();
+        addEventListeners();
     }
+
     private void initializeComponents() {
-        idProduitLabel = new JLabel("ID Produit :");
+        Font labelFont = new Font("Arial", Font.BOLD, 14);
+        Font fieldFont = new Font("Arial", Font.PLAIN, 14);
+
         idProduitField = new JTextField(15);
-        nomProduitLabel = new JLabel("Nom Produit :");
         nomProduitField = new JTextField(15);
-        descriptionProduitLabel = new JLabel("Description Produit :");
         descriptionProduitField = new JTextField(20);
-        prixProduitLabel = new JLabel("Prix Produit :");
         prixProduitField = new JTextField(15);
-        quantiteProduitLabel = new JLabel("Quantite Produit :");
         quantiteProduitField = new JTextField(15);
-        fournisserLabel = new JLabel("Fournisseur :");
         fournisserField = new JTextField(15);
-        categorieProduitLabel = new JLabel("Categorie Produit :");
         categorieProduitField = new JTextField(15);
-        mesurementLabel = new JLabel("Mesurement :");
         mesurementField = new JTextField(15);
+
         rechercherButton = new JButton("Rechercher");
+        rechercherButton.setFont(labelFont);
+        rechercherButton.setBackground(new Color(0, 153, 204));
+        rechercherButton.setForeground(Color.WHITE);
+
         annulerButton = new JButton("Annuler");
+        annulerButton.setFont(labelFont);
+        annulerButton.setBackground(new Color(204, 0, 0));
+        annulerButton.setForeground(Color.WHITE);
     }
+
     private void createLayout() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        addComponent(panel, idProduitLabel, c, 0, 0, 1, 1);
-        addComponent(panel, idProduitField, c, 1, 0, 2, 1);
-        addComponent(panel, nomProduitLabel, c, 0, 1, 1, 1);
-        addComponent(panel, nomProduitField, c, 1, 1, 2, 1);
-        addComponent(panel, descriptionProduitLabel, c, 0, 2, 1, 1);
-        addComponent(panel, descriptionProduitField, c, 1, 2, 2, 1);
-        addComponent(panel, prixProduitLabel, c, 0, 3, 1, 1);
-        addComponent(panel, prixProduitField, c, 1, 3, 2, 1);
-        addComponent(panel, quantiteProduitLabel, c, 0, 4, 1, 1);
-        addComponent(panel, quantiteProduitField, c, 1, 4, 2, 1);
-        addComponent(panel, fournisserLabel, c, 0, 5, 1, 1);
-        addComponent(panel, fournisserField, c, 1, 5, 2, 1);
-        addComponent(panel, categorieProduitLabel, c, 0, 6, 1, 1);
-        addComponent(panel, categorieProduitField, c, 1, 6, 2, 1);
-        addComponent(panel, mesurementLabel, c, 0, 7, 1, 1);
-        addComponent(panel, mesurementField, c, 1, 7, 2, 1);
-        addComponent(panel, rechercherButton, c, 0, 8, 1, 1);
-        addComponent(panel, annulerButton, c, 1, 8, 1, 1);
+        c.insets = new Insets(5, 10, 5, 10); // Add some padding
+        JLabel titleLabel = new JLabel("Rechercher Produit");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.add(titleLabel);
+
+        this.add(titlePanel, BorderLayout.NORTH);
+        addField(panel, "ID Produit:", idProduitField, c, 0);
+        addField(panel, "Nom Produit:", nomProduitField, c, 1);
+        addField(panel, "Description Produit:", descriptionProduitField, c, 2);
+        addField(panel, "Prix Produit:", prixProduitField, c, 3);
+        addField(panel, "Quantite Produit:", quantiteProduitField, c, 4);
+        addField(panel, "Fournisseur:", fournisserField, c, 5);
+        addField(panel, "Categorie Produit:", categorieProduitField, c, 6);
+        addField(panel, "Mesurement:", mesurementField, c, 7);
+
+        c.gridx = 0;
+        c.gridy = 8;
+        c.gridwidth = 3;
+        panel.add(rechercherButton, c);
+
+        c.gridx = 0;
+        c.gridy = 9;
+        c.gridwidth = 3;
+        panel.add(annulerButton, c);
+
         this.add(panel);
     }
-    private void addComponent(JPanel panel, JComponent component, GridBagConstraints c, int x, int y, int width, int height) {
-        c.gridx = x;
-        c.gridy = y;
-        c.gridwidth = width;
-        c.gridheight = height;
-        panel.add(component, c);
+
+    private void addField(JPanel panel, String labelText, JTextField textField, GridBagConstraints c, int yPos) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        c.gridx = 0;
+        c.gridy = yPos;
+        c.gridwidth = 1;
+        panel.add(label, c);
+
+        c.gridx = 1;
+        c.gridy = yPos;
+        c.gridwidth = 2;
+        panel.add(textField, c);
     }
+
+    private void addEventListeners() {
+        annulerButton.addActionListener(e -> this.dispose());
+
+        rechercherButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Produit prod = produitDAO.getProduit(Integer.parseInt(idProduitField.getText()));
+                if (prod != null) {
+                    nomProduitField.setText(prod.getNomProduit());
+                    descriptionProduitField.setText(prod.getDescription());
+                    prixProduitField.setText(String.valueOf(prod.getPrix()));
+                    quantiteProduitField.setText(String.valueOf(prod.getQuantite()));
+                    fournisserField.setText(produitDAO.getNomFournisseurById(prod.getIdFour()));
+                    categorieProduitField.setText(prod.getCategorie());
+                    mesurementField.setText(prod.getMesurementUnit());
+                }
+            }
+        });
+    }
+
+
 }
