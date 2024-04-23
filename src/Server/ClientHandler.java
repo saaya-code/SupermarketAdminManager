@@ -47,16 +47,22 @@ class ClientHandler extends Thread {
     }
 
     private void UpdateRequest(BufferedReader br, PrintWriter pr) throws IOException, SQLException {
+        System.out.println("Updating request");
         String query = br.readLine();
         Statement stmt = con.createStatement();
         stmt.executeUpdate(query);
-        pr.println("Query executed");
-        pr.flush();
+        //PrintWriter out = new PrintWriter(socket.getOutputStream());
+        for(User u: users){
+            PrintWriter p = new PrintWriter(u.getUserSocket().getOutputStream());
+            System.out.println(u.getUsername());
+            p.println("refresh");
+            p.flush();
+        }
     }
     private void SelectionRequest(BufferedReader br, PrintWriter pr) throws IOException, SQLException {
         String query = br.readLine();
         Statement st = con.createStatement();
-        System.out.println("Query: " + query);
+        //System.out.println("Query: " + query);
         if (query.startsWith("SELECT")) {
             ResultSet rs = st.executeQuery(query);
             //create a list of objects to store
@@ -119,16 +125,15 @@ class ClientHandler extends Thread {
                 BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter pr = new PrintWriter(socket.getOutputStream());
                 //ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-
                 String query = br.readLine();
-
+                System.out.println("GOT NEW Query: " + query);
                 handleQuery(query, br, pr);
 
             }
         } catch (IOException e) {
 
             System.out.println("Error handling client: " + e.getMessage());
-            //throw  new RuntimeException(e);
+            throw  new RuntimeException(e);
         } finally {
             // Remove the socket from the list when the client disconnects
             for(User user: users){

@@ -1,6 +1,7 @@
 package Client.UI;
 import Classes.User;
 import Client.CRUD.ProduitDAO;
+import Client.UI.InternalFrames.AfficherProduits;
 import Client.UI.InternalFrames.AjouterProduit;
 import Client.UI.InternalFrames.RechercherProduit;
 import Server.Config;
@@ -23,6 +24,7 @@ public class Application extends JFrame{
     JMenu menuCommande;
     JMenuItem menuItemAjouterProduit;
     JMenuItem menuItemRechercherProduit;
+    JMenuItem menuItemAfficherProduit;
     JMenuItem menuItemAjouterClient;
     JMenuItem menuItemRechercherClient;
     JMenuItem menuItemAjouterCommande;
@@ -37,6 +39,10 @@ public class Application extends JFrame{
         this.setSize(700, 700);
         this.setTitle("Supermarket Manager");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ImageIcon icon = new ImageIcon("C:\\Users\\boual\\IdeaProjects\\untitled\\src\\assets\\ajoutImage.png");
+
+        // Set the icon image for the JFrame
+        setIconImage(icon.getImage());
         desktop = new JDesktopPane();
         this.add(desktop);
         this.setVisible(true);
@@ -56,6 +62,7 @@ public class Application extends JFrame{
         menuCommande = new JMenu("Commande");
         menuItemAjouterProduit = new JMenuItem("Ajouter");
         menuItemRechercherProduit = new JMenuItem("Rechercher");
+        menuItemAfficherProduit = new JMenuItem("Afficher");
         menuItemAjouterClient = new JMenuItem("Ajouter");
         menuItemRechercherClient = new JMenuItem("Rechercher");
         menuItemAjouterCommande = new JMenuItem("Ajouter");
@@ -68,6 +75,7 @@ public class Application extends JFrame{
         menuBar.add(menuCommande);
         menuProduit.add(menuItemAjouterProduit);
         menuProduit.add(menuItemRechercherProduit);
+        menuProduit.add(menuItemAfficherProduit);
         menuClient.add(menuItemAjouterClient);
         menuClient.add(menuItemRechercherClient);
         menuCommande.add(menuItemAjouterCommande);
@@ -90,6 +98,10 @@ public class Application extends JFrame{
         menuItemRechercherProduit.addActionListener(e -> {
             RechercherProduit rechercherProduit = new RechercherProduit(produitDAO);
             desktop.add(rechercherProduit);
+        });
+        menuItemAfficherProduit.addActionListener(e -> {
+            AfficherProduits afficherProduit = new AfficherProduits(produitDAO, socket);
+            desktop.add(afficherProduit);
         });
     }
 

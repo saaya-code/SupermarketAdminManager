@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class RechercherProduit extends JInternalFrame {
     ProduitDAO produitDAO;
     JTextField idProduitField, nomProduitField, descriptionProduitField, prixProduitField, quantiteProduitField, fournisserField, categorieProduitField, mesurementField;
-    JButton rechercherButton, annulerButton;
+    JButton rechercherButton, annulerButton, modifierButton;
 
     public RechercherProduit(ProduitDAO produitDAO) {
         this.setSize(500, 500);
@@ -46,6 +46,11 @@ public class RechercherProduit extends JInternalFrame {
         annulerButton.setFont(labelFont);
         annulerButton.setBackground(new Color(204, 0, 0));
         annulerButton.setForeground(Color.WHITE);
+
+        modifierButton = new JButton("Modifier");
+        modifierButton.setFont(labelFont);
+        modifierButton.setBackground(new Color(0, 204, 10));
+        modifierButton.setForeground(Color.WHITE);
     }
 
     private void createLayout() {
@@ -76,6 +81,11 @@ public class RechercherProduit extends JInternalFrame {
 
         c.gridx = 0;
         c.gridy = 9;
+        c.gridwidth = 3;
+        panel.add(modifierButton, c);
+
+        c.gridx = 0;
+        c.gridy = 10;
         c.gridwidth = 3;
         panel.add(annulerButton, c);
 
@@ -113,6 +123,19 @@ public class RechercherProduit extends JInternalFrame {
                     mesurementField.setText(prod.getMesurementUnit());
                 }
             }
+        });
+        modifierButton.addActionListener(e->{
+            String nomProduit = nomProduitField.getText();
+            String descriptionProduit = descriptionProduitField.getText();
+            int prixProduit = Integer.parseInt(prixProduitField.getText());
+            int quantiteProduit = Integer.parseInt(quantiteProduitField.getText());
+            String fournisseur = fournisserField.getText();
+            String categorieProduit = categorieProduitField.getText();
+            String mesurement = mesurementField.getText();
+            Produit prod = new Produit(Integer.parseInt(idProduitField.getText()), nomProduit, descriptionProduit, prixProduit, quantiteProduit, mesurement, categorieProduit, produitDAO.getIdFournisseurByNom(fournisseur));
+            produitDAO.updateProduit(prod);
+            JOptionPane.showMessageDialog(null, "Produit modifié avec succès!");
+
         });
     }
 

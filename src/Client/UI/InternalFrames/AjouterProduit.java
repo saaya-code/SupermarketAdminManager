@@ -1,10 +1,12 @@
 package Client.UI.InternalFrames;
 import Client.CRUD.ProduitDAO;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -15,8 +17,7 @@ import static Client.Helpers.Serializer.getObjectFromServer;
 
 public class AjouterProduit extends JInternalFrame {
     Socket socket;
-    JTextField nomProduitField, descriptionProduitField, prixProduitField,
-            quantiteProduitField;
+    JTextField nomProduitField, descriptionProduitField, prixProduitField, quantiteProduitField;
     JComboBox<String> fournisserField, categorieProduitField, mesurementField;
     JButton ajouterButton, annulerButton;
     ProduitDAO produitDAO;
@@ -34,7 +35,8 @@ public class AjouterProduit extends JInternalFrame {
         addEventListeners();
     }
 
-    private void initializeComponents() throws IOException, ClassNotFoundException, SQLException {
+
+    private void initializeComponents() throws IOException, ClassNotFoundException {
         Font labelFont = new Font("Arial", Font.BOLD, 14);
 
         nomProduitField = new JTextField(15);
@@ -44,7 +46,7 @@ public class AjouterProduit extends JInternalFrame {
         fournisserField = new JComboBox<>();
         categorieProduitField = new JComboBox<>(new String[]{"Categorie 1", "Categorie 2", "Categorie 3"});
         mesurementField = new JComboBox<>(new String[]{"Kg", "Litre", "Piece"});
-        ajouterButton = new JButton("Rechercher");
+        ajouterButton = new JButton("Ajouter");
 
         ajouterButton.setFont(labelFont);
         ajouterButton.setBackground(new Color(0, 153, 204));
@@ -123,7 +125,7 @@ public class AjouterProduit extends JInternalFrame {
                 PrintWriter pr = new PrintWriter(socket.getOutputStream());
                 pr.println("UPDATING");
                 pr.println("INSERT INTO PRODUIT (nomProduit, description, prix, quantite, idFour, categorie, mesurementunit) " +
-                        "VALUES ('" + nomProduit + "', '" + descriptionProduit + "', '" + prixProduit + "', '" + quantiteProduit + "', '" + fournisseur + "', '" + categorieProduit + "', '" + mesurement + "');");
+                        "VALUES ('" + nomProduit + "', '" + descriptionProduit + "', '" + prixProduit + "', '" + quantiteProduit + "', '" + produitDAO.getIdFournisseurByNom(fournisseur) + "', '" + categorieProduit + "', '" + mesurement + "');");
                 pr.flush();
                 JOptionPane.showMessageDialog(this, "Produit ajouté avec succès");
                 clearInputs();

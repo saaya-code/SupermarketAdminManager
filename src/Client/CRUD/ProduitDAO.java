@@ -119,4 +119,22 @@ public class ProduitDAO implements Client.Interfaces.ProduitDaoCRUD{
         }
         return null;
     }
+
+    public int getIdFournisseurByNom(String fournisseur) {
+        String query = "SELECT IdFour FROM Fournisseur WHERE nomFour = ?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, fournisseur);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("IdFour");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
 }

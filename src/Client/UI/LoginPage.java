@@ -26,10 +26,12 @@ public class LoginPage extends JFrame {
         this.setSize(400, 300);
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setIconImage(new ImageIcon("C:\\Users\\boual\\IdeaProjects\\untitled\\src\\assets\\login.png").getImage());
         this.setVisible(true);
         initilizeComponents();
         createLayout();
         addEventListeners();
+
 
     }
     private void initilizeComponents() {
@@ -118,6 +120,7 @@ public class LoginPage extends JFrame {
                     throw new RuntimeException(ex);
                 }
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Server error");
                 throw new RuntimeException(ex);
             }
 

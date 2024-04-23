@@ -19,15 +19,13 @@ public class Server {
             ServerSocket server = new ServerSocket(9000);
             System.out.println("Server en écoute sur PORT 9000...");
             UsersTableModel model = new UsersTableModel(Users);
+            new ServerIHM(Users, model);
 
-            ServerIHM serverIHM = new ServerIHM(Users,model);
             while(true) {
                 Socket s = server.accept();
                 System.out.println("Client connecté : " + s.getInetAddress());
                 // Start a new thread to handle the client
                 new ClientHandler(s, Users, con, model).start();
-
-
             }
 
         } catch (IOException e) {
