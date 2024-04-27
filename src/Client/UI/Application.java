@@ -48,7 +48,7 @@ public class Application extends JFrame{
         this.setSize(700, 700);
         this.setTitle("Supermarket Manager");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
+        //this.setLayout(new FlowLayout());
         ImageIcon icon = new ImageIcon("C:\\Users\\boual\\IdeaProjects\\untitled\\src\\assets\\ajoutImage.png");
         this.user = user;
         // Set the icon image for the JFrame
@@ -84,7 +84,7 @@ public class Application extends JFrame{
         title = new JLabel("Welcome to supermarket manager");
         menuBar = new JMenuBar();
         menuProduit = new JMenu("Produit");
-        menuClient = new JMenu("Client");
+        menuClient = new JMenu("Fournisseur");
         menuCommande = new JMenu("Commande");
         chat = new JMenu("Chat");
         menuItemAjouterProduit = new JMenuItem("Ajouter");
@@ -143,6 +143,10 @@ public class Application extends JFrame{
             RechercherFournisseur rechercherFournisseur = new RechercherFournisseur(fournisseurDAO);
             desktop.add(rechercherFournisseur);
         });
+        getMenuItemAfficherClient.addActionListener(e->{
+            AfficherFournisseurs afficherFournisseurs = new AfficherFournisseurs(fournisseurDAO, socket);
+            desktop.add(afficherFournisseurs);
+        });
 
     }
 
@@ -191,7 +195,12 @@ public class Application extends JFrame{
 
         gbc.gridy = 5;
         weatherPanel.add(ventLabel, gbc);
-        this.add(weatherPanel, BorderLayout.CENTER);
+        JFrame weatherFrame = new JFrame("Weather");
+        weatherFrame.add(weatherPanel);
+        weatherFrame.setSize(400, 400);
+        weatherFrame.setVisible(true);
+        weatherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     private JSONObject getWeatherData() {
