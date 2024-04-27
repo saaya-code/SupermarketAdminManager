@@ -109,6 +109,11 @@ class ClientHandler extends Thread {
                     break;
                 case "UPDATING":
                     UpdateRequest(br, pr);
+                    for (User user : users) {
+                        PrintWriter p = new PrintWriter(user.getUserSocket().getOutputStream());
+                        p.println("refresh");
+                        p.flush();
+                    }
                     break;
                 default:
                     System.out.println("Unknown request");
@@ -133,7 +138,7 @@ class ClientHandler extends Thread {
         } catch (IOException e) {
 
             System.out.println("Error handling client: " + e.getMessage());
-            throw  new RuntimeException(e);
+            //throw  new RuntimeException(e); comment this to stop server from crashing when a user is not gracefully disconnected
         } finally {
             // Remove the socket from the list when the client disconnects
             for(User user: users){

@@ -36,44 +36,58 @@ public class LoginPage extends JFrame {
     }
     private void initilizeComponents() {
         title = new JLabel("Login/Register Page");
-        usernameLabel = new JLabel("Username");
-        usernameField = new JTextField(5);
-        passwordLabel = new JLabel("Password");
-        passwordField = new JPasswordField(5);
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+        usernameLabel = new JLabel("Username:");
+        usernameField = new JTextField(15);
+
+        passwordLabel = new JLabel("Password:");
+        passwordField = new JPasswordField(15);
+
         loginButton = new JButton("Login");
         registerButton = new JButton("Register");
-        pane = new JPanel();
 
 
 
     }
 
     private void createLayout() {
-
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Add padding
+
         GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.insets = new Insets(0, 0, 20, 0); // Add vertical spacing
 
-        // Add labels and corresponding components
-        c.fill = GridBagConstraints.HORIZONTAL;
-        addComponent(panel, usernameLabel, c, 0, 0, 1, 1);
-        addComponent(panel, usernameField, c, 1, 0, 2, 1);
-        addComponent(panel, passwordLabel, c, 0, 1, 1, 1);
-        addComponent(panel, passwordField, c, 1, 1, 2, 1);
+        panel.add(title, c);
 
+        c.gridwidth = 1;
+        c.gridy = 1;
+        c.insets = new Insets(0, 0, 10, 10); // Reset insets
 
-        // Add buttons
-        JPanel buttonPanel = new JPanel();
+        panel.add(usernameLabel, c);
+        c.gridx = 1;
+        panel.add(usernameField, c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(passwordLabel, c);
+        c.gridx = 1;
+        panel.add(passwordField, c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 2;
+        c.insets = new Insets(20, 0, 0, 0); // Add more space below buttons
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0)); // Center-align buttons with spacing
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
-        c.fill = GridBagConstraints.NONE;
-        c.gridy = 5;
-        c.gridwidth = 3;
-        addComponent(panel, buttonPanel, c, 0, 5, 3, 1);
+        panel.add(buttonPanel, c);
 
         getContentPane().add(panel);
-        setSize(500,250);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
     }
     private void addComponent(JPanel panel, JComponent component, GridBagConstraints c, int x, int y, int width, int height) {
         c.gridx = x;
@@ -81,13 +95,6 @@ public class LoginPage extends JFrame {
         c.gridwidth = width;
         c.gridheight = height;
         panel.add(component, c);
-    }
-    protected void finilize() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
    private void addEventListeners() {
         loginButton.addActionListener(e -> {
@@ -128,6 +135,13 @@ public class LoginPage extends JFrame {
 
     }
 
+    protected void finilize() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 

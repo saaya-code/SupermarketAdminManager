@@ -1,4 +1,5 @@
 package Client.UI.InternalFrames;
+import Client.CRUD.FournisseurDAO;
 import Client.CRUD.ProduitDAO;
 
 import javax.imageio.ImageIO;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,14 +23,16 @@ public class AjouterProduit extends JInternalFrame {
     JComboBox<String> fournisserField, categorieProduitField, mesurementField;
     JButton ajouterButton, annulerButton;
     ProduitDAO produitDAO;
+    FournisseurDAO fournisseurDAO;
 
-    public AjouterProduit(Socket s, ProduitDAO produitDAO) throws SQLException, IOException, ClassNotFoundException {
+    public AjouterProduit(Socket s, ProduitDAO produitDAO, FournisseurDAO fournisseurDAO) throws SQLException, IOException, ClassNotFoundException {
         this.setSize(500, 500);
         this.setTitle("Ajouter Produit");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.socket = s;
         this.produitDAO = produitDAO;
+        this.fournisseurDAO = fournisseurDAO;
 
         initializeComponents();
         createLayout();
@@ -57,9 +61,13 @@ public class AjouterProduit extends JInternalFrame {
         annulerButton.setBackground(new Color(204, 0, 0));
         annulerButton.setForeground(Color.WHITE);
 
-        ArrayList<Object> receivedList = (ArrayList<Object>) getObjectFromServer(socket, "SELECT idFour FROM FOURNISSEUR");
-        for (Object element : receivedList) {
-            fournisserField.addItem(produitDAO.getNomFournisseurById(Integer.parseInt(String.valueOf(element))));
+        ResultSet fournisseursRS = fournisseurDAO.getAllFournisseurs();
+        try{
+            while(fournisseursRS.next()){
+                fournisserField.addItem(fournisseursRS.getString("nomFour"));
+            }
+        } catch (SQLException e){
+            throw new RuntimeException(e);
         }
     }
 
