@@ -1,5 +1,6 @@
 package Client.UI;
 import Classes.User;
+import Client.CRUD.CommandeDAO;
 import Client.CRUD.FournisseurDAO;
 import Client.CRUD.ProduitDAO;
 import Client.UI.InternalFrames.*;
@@ -42,6 +43,7 @@ public class Application extends JFrame{
     Connection con;
     ProduitDAO produitDAO;
     FournisseurDAO fournisseurDAO;
+    CommandeDAO commandeDAO;
     User user;
 
     public Application(User user){
@@ -63,6 +65,7 @@ public class Application extends JFrame{
         this.con = MyConnection.getConnection(Config.URL, Config.USERNAME, Config.PASSWORD);
         produitDAO = new ProduitDAO(con);
         fournisseurDAO = new FournisseurDAO(con);
+        commandeDAO = new CommandeDAO(con);
         displayWeather();
         new Thread(()->{
             try {
@@ -95,7 +98,7 @@ public class Application extends JFrame{
         getMenuItemAfficherClient = new JMenuItem("Afficher");
         menuItemAjouterCommande = new JMenuItem("Ajouter");
         menuItemRechercherCommande = new JMenuItem("Rechercher");
-        menuItemAfficherCommande = new JMenuItem("Afficher");
+        menuItemAfficherCommande = new JMenuItem("Confirmer");
         joindreChat = new JMenuItem("Joindre");
 
     }
@@ -111,7 +114,8 @@ public class Application extends JFrame{
         menuClient.add(menuItemRechercherClient);
         menuClient.add(getMenuItemAfficherClient);
         menuCommande.add(menuItemAjouterCommande);
-        menuCommande.add(menuItemRechercherCommande);
+        //menuCommande.add(menuItemRechercherCommande);
+        menuCommande.add(menuItemAfficherCommande);
         //center the title
 
     }
@@ -146,6 +150,14 @@ public class Application extends JFrame{
         getMenuItemAfficherClient.addActionListener(e->{
             AfficherFournisseurs afficherFournisseurs = new AfficherFournisseurs(fournisseurDAO, socket);
             desktop.add(afficherFournisseurs);
+        });
+        menuItemAjouterCommande.addActionListener(e->{
+            AjouterCommande ajouterCommande = new AjouterCommande(commandeDAO, user, produitDAO);
+            desktop.add(ajouterCommande);
+        });
+        menuItemAfficherCommande.addActionListener(e->{
+            ConfirmerCommande afficherCommandes = new ConfirmerCommande(commandeDAO, user);
+            desktop.add(afficherCommandes);
         });
 
     }
@@ -199,7 +211,7 @@ public class Application extends JFrame{
         weatherFrame.add(weatherPanel);
         weatherFrame.setSize(400, 400);
         weatherFrame.setVisible(true);
-        weatherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        weatherFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
     }
 

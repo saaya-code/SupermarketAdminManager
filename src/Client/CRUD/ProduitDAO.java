@@ -137,4 +137,21 @@ public class ProduitDAO implements Client.Interfaces.ProduitDaoCRUD{
         }
         return 0;
     }
+    public int getProduitIdByNom(String nom){
+        String query = "SELECT IdProduit FROM Produit WHERE nomProduit = ?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = con.prepareStatement(query);
+            ps.setString(1, nom);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("IdProduit");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
+    }
 }

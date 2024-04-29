@@ -114,6 +114,8 @@ public class RechercherFournisseur extends JInternalFrame {
                     nomFournisseurField.setText(fournisseur.getNomFour());
                     localisationFournisseurField.setText(fournisseur.getLocalisation());
                     emailFournisseurField.setText(fournisseur.getEmail());
+                    debitFournisseurField.setText(String.valueOf(fournisseur.getDebit()));
+                    creditFournisseurField.setText(String.valueOf(fournisseur.getCredit()));
                 }
             }
         });

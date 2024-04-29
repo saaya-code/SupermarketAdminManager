@@ -23,8 +23,8 @@ public class LoginPage extends JFrame {
     Socket socket;
     public LoginPage() {
         this.setTitle("Login page");
-        this.setSize(400, 300);
-        this.setResizable(true);
+        this.setSize(700, 700);
+        //this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setIconImage(new ImageIcon("C:\\Users\\boual\\IdeaProjects\\untitled\\src\\assets\\login.png").getImage());
         this.setVisible(true);
